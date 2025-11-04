@@ -187,7 +187,6 @@
                 box-shadow: 0 0 0 0 rgba(255,255,255,0);
             }
         }
-
         /* 音乐背景卡片（合并歌词） */
         .music-background-card {
             width: 90%;
@@ -335,7 +334,7 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #a1c4fd);
-                        background-size: 400% 400%;
+                   background-size: 400% 400%;
             animation: gradient 3s ease infinite;
         }
         
@@ -456,7 +455,6 @@
             color: #333;
             font-family: sans-serif;
         }
-
         /* 手机端适配 */
         @media (max-width: 480px) {
             .profile-card, .links-container, .announcement-card {
@@ -501,6 +499,7 @@
     <div class="popup" id="popup">
         <p>我系晴祝你天天开心💓</p>
     </div>
+
     <!-- 顶部个人信息卡片 -->
     <div id="v2" class="profile-card fade-in" style="opacity: 1; transform: translateY(0px);">
         <img id="v3" src="mmexport1754134112937.jpeg" alt="头像" loading="lazy">
@@ -648,8 +647,7 @@
             // 初始化北京时间显示
             initBeijingTime();
         });
-        
-        // 雪花飘落逻辑
+                // 雪花飘落逻辑
         function createSnowflakes() {
             const snowflakesContainer = document.getElementById('snowflakes');
             const snowflakeCount = 35;
@@ -676,7 +674,8 @@
                 snowflakesContainer.appendChild(snowflake);
             }
         }
-                // 创建单个雪花（用于点击后补充）
+        
+        // 创建单个雪花（用于点击后补充）
         function createSingleSnowflake(leftPos) {
             const snowflakesContainer = document.getElementById('snowflakes');
             const snowflake = document.createElement('div');
@@ -876,41 +875,53 @@
                 
                 // 20秒后显示弹窗
                 const popupTimer = setTimeout(() => {
-                    if (isMoodAnimationActive) {
-                        const popup = document.getElementById('popup');
-                        popup.style.display = 'block';
-                    }
-                }, 20000);
-                moodTimers.push(popupTimer);
-            }
-            
-            function stopMoodAnimation() {
-                isMoodAnimationActive = false;
-                moodBtn.innerText = '安慰一下你';
-                
-                // 清除所有定时器
-                moodTimers.forEach(timer => clearTimeout(timer));
-                moodTimers = [];
-                
-                // 移除所有元素
-                moodElements.forEach(el => {
-                    if (el.parentNode) {
-                        el.parentNode.removeChild(el);
-                    }
+                     // 优化滚动性能
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    // 这里可以添加滚动相关的逻辑
+                    ticking = false;
                 });
-                moodElements = [];
+                ticking = true;
+            }
+        }, { passive: true });
+        
+        // 初始化北京时间显示
+        function initBeijingTime() {
+            const timeElement = document.getElementById('beijingTime');
+            
+            function updateBeijingTime() {
+                const now = new Date();
                 
-                // 隐藏弹窗
-                const popup = document.getElementById('popup');
-                popup.style.display = 'none';
+                // 获取北京时间（UTC+8）
+                const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+                const beijingTime = new Date(utc + (3600000 * 8));
+                
+                // 格式化时间为 HH:MM:SS
+                const hours = String(beijingTime.getHours()).padStart(2, '0');
+                const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
+                const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
+                
+                // 更新显示
+                timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+                
+                // 每秒更新一次
+                setTimeout(updateBeijingTime, 1000);
             }
             
-            function toggleMoodAnimation() {
-                if (isMoodAnimationActive) {
-                    stopMoodAnimation();
-                } else {
-                    startMoodAnimation();
-                }
-            }
-            
-            moodBtn.add
+            // 初始调用
+            updateBeijingTime();
+        }
+        
+        // 优化窗口调整大小事件
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                // 调整大小后的操作
+            }, 250);
+        });
+     </script>
+</body>
+</html>
